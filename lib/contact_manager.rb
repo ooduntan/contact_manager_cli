@@ -35,9 +35,11 @@ class ContactManager < DataManager
       puts 'Oops! message box empty'
     else
       puts 'Found ' + message_result_data.length.to_s + ' messages'
-      counter=0
+      counter=1
       message_result_data.each do |each_message_data|
-        puts "[#{counter.to_s}] Sent to" + each_message_data[1]+"\n\nmessage: #{each_message_data[2]}"
+      user_name=get_user_name_from_id(each_message_data[1].to_i)
+      puts "[#{counter.to_s}] Sent to: " + user_name[0][1]+"\nmessage: #{each_message_data[2]}\n\n"
+      counter+=1
       end
     end
   end

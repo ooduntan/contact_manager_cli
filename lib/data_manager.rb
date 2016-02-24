@@ -17,6 +17,11 @@ class DataManager
     returned_data
   end
 
+  def get_user_name_from_id(user_idx)
+     #query=q%(SELECT * FROM contacts_data where  message_idx = user_idx )
+     @db.execute("SELECT * FROM contacts_data where  contact_idx = #{user_idx.to_i}")
+  end
+
   def bring_all_message
     returned_data=@db.execute("SELECT * FROM contacts_message_data ")
     returned_data

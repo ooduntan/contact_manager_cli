@@ -55,7 +55,6 @@ class CommandHelper < ContactManager
 			prints_result_only(result_array)
 			result_array[(gets.chomp.to_i-1)]
 		else
-			puts result_array[0]
 			result_array[0]
 		end
 end
@@ -111,7 +110,7 @@ end
 				main_menu_command
 			elsif command_array[1]=='-m'
 				result =search_all_message
-				display_message_result(command_array[1],result)
+				display_message_result(result)
 			else
 				puts "Invalid command use list -m or use -h for help or -e to exist"
 				main_menu_command
