@@ -17,8 +17,16 @@ class DataManager
     returned_data
   end
 
+  def bring_all_message
+    returned_data=@db.execute("SELECT * FROM contacts_message_data ")
+    returned_data
+  end
+
   def self.look_up_user
     db = SQLite3::Database.new('bootcamp_contacts_app.db')
+    create_data_table = 'CREATE TABLE IF NOT EXISTS '
+    create_data_table += 'user_data(user_name TEXT NOT NULL, phone_number CHAR(50))'
+    db.execute(create_data_table)
     db.execute("SELECT * FROM user_data")
   end
 
@@ -28,7 +36,7 @@ class DataManager
     query_values=''
     data_hash.each do |key , value|
       query_columns<< key + ', '
-      query_values<< "'"+value+ "',"
+      query_values<< "'"+value.to_s+ "',"
     end
     returned_hash={'columns'=>query_columns.strip.gsub!( /.{1}$/, '' ),'values'=>query_values.gsub!( /.{1}$/, '' )}
     returned_hash
@@ -60,7 +68,7 @@ class DataManager
   def prepare_message_table
     create_data_table = 'CREATE TABLE IF NOT EXISTS '
     create_data_table += 'contacts_message_data(message_idx INTEGER PRIMARY KEY'
-    create_data_table += ' AUTOINCREMENT, contact_idx INT NOT NULL, message TEXT NOT NULL)'
+    create_data_table += ' AUTOINCREMENT, contact_idx TEXT NOT NULL, message TEXT NOT NULL)'
     @db.execute(create_data_table)
   end
 

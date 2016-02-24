@@ -42,6 +42,24 @@ class CommandHelper < ContactManager
 		input_data
 	end
 
+	def save_sent_messages(contact_id, message_body)
+
+	end
+
+	def display_search_result_for_sms(search_term,result_array)
+		if result_array.length<1
+			puts "found no result for "+search_term
+			main_menu_command
+		elsif result_array.length>1
+			puts 'Which '+search_term+'?'
+			prints_result_only(result_array)
+			result_array[(gets.chomp.to_i-1)]
+		else
+			puts result_array[0]
+			result_array[0]
+		end
+end
+
 	def display_search_result(search_term,result_array)
 		if result_array.length<1
 			puts "found no result for "+search_term
@@ -65,8 +83,8 @@ end
 
 	def prints_result_only(result_array)
 			for i in 0...(result_array.length)
-   		puts "["<< (i+1).to_s << "] " << result_array[i][1]
-		end
+   			puts "["<< (i+1).to_s << "] " << result_array[i][1]
+			end
 	end
 
 	def main_menu_command
@@ -80,16 +98,37 @@ end
 				main_menu_command
 			end
 		elsif command_array[0].downcase == 'search'
-			if command_array.length<1
+			if command_array.length<1 || command_array.length>2
 				puts "Invalid command use search <keyword> -h for help or -e to exist"
 				main_menu_command
 			else
 				result =search_contact(command_array[1])
 				display_search_result(command_array[1],result)
 			end
+		elsif command_array[0].downcase == 'list'
+			if command_array.length<1 || command_array.length>2
+				puts "Invalid command use list -m or use -h for help or -e to exist"
+				main_menu_command
+			elsif command_array[1]=='-m'
+				result =search_all_message
+				display_message_result(command_array[1],result)
+			else
+				puts "Invalid command use list -m or use -h for help or -e to exist"
+				main_menu_command
+			end
+
 			print command_array
 		elsif command_array[0].downcase == 'text'
-
+			if command_array.length<3 || command_array.length>4
+				puts "Invalid command use text <name> <messages> -h for help or -e to exist"
+				main_menu_command
+			else
+				result =search_contact(command_array[1])
+				recipiant_details=display_search_result_for_sms(command_array[1],result)
+				send_and_save_message(recipiant_details,command_array[2])
+				puts 'Message Saved and sent successfully'
+				main_menu_command
+			end
 		elsif command_array[0].downcase == '-e'
 			puts 'Thank you for using contact manager goodbye'
 		else

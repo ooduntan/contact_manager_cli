@@ -26,6 +26,33 @@ class ContactManager < DataManager
     number
   end
 
+  def search_all_message
+    bring_all_message
+  end
+
+  def display_message_result(message_result_data)
+    if message_result_data.length<1
+      puts 'Oops! message box empty'
+    else
+      puts 'Found ' + message_result_data.length.to_s + ' messages'
+      counter=0
+      message_result_data.each do |each_message_data|
+        puts "[#{counter.to_s}] Sent to" + each_message_data[1]+"\n\nmessage: #{each_message_data[2]}"
+      end
+    end
+  end
+
+  private
+  def save_message(contact_idx , message)
+    clean_message=quote_string(message)
+    new_message_hash={'contact_idx'=>contact_idx,'message'=>clean_message}
+    save_into_db('contacts_message_data', new_message_hash)
+  end
+
+  def send_and_save_message(recipient_array,message)
+    save_message(recipient_array[0] , message)
+  end
+
   def add_new_contact(name, phone_number)
     clean_name=quote_string(name)
     clean_phone_number=quote_string(phone_number)
