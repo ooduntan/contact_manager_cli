@@ -42,6 +42,32 @@ class CommandHelper < ContactManager
 		input_data
 	end
 
+	def display_search_result(search_term,result_array)
+		if result_array.length<1
+			puts "found no result for "+search_term
+			main_menu_command
+		elsif result_array.length>1
+			puts 'Which '+search_term+'?'
+			prints_result_only(result_array)
+			display_selected_index(result_array[(gets.chomp.to_i-1)])
+		else
+			puts result_array[0][1] +": "+result_array[0][2]
+			puts 'to continue type your command or use -e to exist'
+			main_menu_command
+		end
+end
+
+	def display_selected_index(selected_array)
+		puts selected_array[1] << ": "<< selected_array[2]
+		puts 'to continue type your command or use -e to exist'
+		main_menu_command
+	end
+
+	def prints_result_only(result_array)
+			for i in 0...(result_array.length)
+   		puts "["<< (i+1).to_s << "] " << result_array[i][1]
+		end
+	end
 
 	def main_menu_command
 		command_string=gets.chomp
@@ -58,8 +84,8 @@ class CommandHelper < ContactManager
 				puts "Invalid command use search <keyword> -h for help or -e to exist"
 				main_menu_command
 			else
-				puts search_contact(command_array[1])
-				na=gets.chomp
+				result =search_contact(command_array[1])
+				display_search_result(command_array[1],result)
 			end
 			print command_array
 		elsif command_array[0].downcase == 'text'
