@@ -1,4 +1,4 @@
-require "contact_manager_cli/version"
+require_relative "contact_manager_cli/version"
 
 module ContactManagerCli
   # Your code goes here...
@@ -12,9 +12,9 @@ module ContactManagerCli
 		phone_number = gets.chomp
 		purified_phone_number=ContactManager.purify_number(phone_number)
 		contact_manager_obj = ContactManager.new(name,purified_phone_number)
-		puts "Welcome #{name} for help type -h and press the enter key"
+		puts "Welcome #{name} for help type -h and press the enter key or -e to exist"
 	else
-		puts 'Welcome back '+user_data[0][0]+' for help type -h and press the enter key'
+		puts 'Welcome back '+user_data[0][0]+' for help type -h and press the enter key or -e to exist'
 		contact_manager_obj = ContactManager.new()
 	end
 	command_checker_obj=CommandHelper.new()

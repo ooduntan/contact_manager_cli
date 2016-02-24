@@ -27,7 +27,10 @@ class ContactManager < DataManager
   end
 
   def add_new_contact(name, phone_number)
-      saveContact(name, phone_number)
+    clean_name=quote_string(name)
+    clean_phone_number=quote_string(phone_number)
+    new_contact_hash={'contact_name'=>clean_name,'contact_phoneNumber'=>clean_phone_number}
+      save_into_db('contacts_data', new_contact_hash)
   end
 
   def check_phone_number?(phone_number)
@@ -36,11 +39,7 @@ class ContactManager < DataManager
   end
 
   def search_contact(name)
-    if name.empty?
       look_up_data(name)
-    else
-      false
-    end
   end
 
   def display_search_result(listed_number)

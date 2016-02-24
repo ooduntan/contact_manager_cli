@@ -13,7 +13,8 @@ class DataManager
 
 
   def look_up_data(_name)
-    @db.execute(%q(SELECT * FROM contact_name LIKE %'#{_name}'%))
+    returned_data=@db.execute("SELECT * FROM contacts_data where  contact_name LIKE '%"+_name+"%'")
+    returned_data
   end
 
   def self.look_up_user
@@ -64,7 +65,7 @@ class DataManager
   end
 
   def quote_string(text_value)
-    text_value.to_s.gsub(/\\/, '\&\&').gsub(/'/, "''")
+    text_value=text_value.to_s.gsub(/\\/, '\&\&').gsub(/'/, "''")
     text_value
   end
 end
