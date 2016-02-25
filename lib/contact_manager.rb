@@ -1,5 +1,6 @@
 # this class handles the  search and add
 require_relative 'data_manager'
+require 'open-uri'
 class ContactManager < DataManager
   def initialize(name=nil,phone_number=nil)
     if name != nil && phone_number != nil
@@ -26,6 +27,12 @@ class ContactManager < DataManager
     number
   end
 
+  def send_sms_using_api(sender,recipient_number,clean_message)
+    placekitten = open('http://api.smartsmssolutions.com/smsapi.php?username=ITVessel&password=tomboy&sender='+sender+'&recipient='+recipient_number+'&message='+clean_message+'')
+    placekitten.status
+
+  end
+
   def search_all_message
     bring_all_message
   end
@@ -38,7 +45,7 @@ class ContactManager < DataManager
       counter=1
       message_result_data.each do |each_message_data|
       user_name=get_user_name_from_id(each_message_data[1].to_i)
-      puts "[#{counter.to_s}] Sent to: " + user_name[0][1]+"\nmessage: #{each_message_data[2]}\n\n"
+      puts "[#{counter.to_s}] Sent to: #{user_name[0][2]}\nName: " + user_name[0][1]+"\nmessage: #{each_message_data[2]}\n\n"
       counter+=1
       end
     end
@@ -53,6 +60,7 @@ class ContactManager < DataManager
 
   def send_and_save_message(recipient_array,message)
     save_message(recipient_array[0] , message)
+    send_sms_using_api(sender,recipient_array[0],message)
   end
 
   def add_new_contact(name, phone_number)

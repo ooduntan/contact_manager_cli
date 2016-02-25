@@ -42,10 +42,6 @@ class CommandHelper < ContactManager
 		input_data
 	end
 
-	def save_sent_messages(contact_id, message_body)
-
-	end
-
 	def display_search_result_for_sms(search_term,result_array)
 		if result_array.length<1
 			puts "found no result for "+search_term
@@ -109,14 +105,13 @@ end
 				puts "Invalid command use list -m or use -h for help or -e to exist"
 				main_menu_command
 			elsif command_array[1]=='-m'
-				result =search_all_message
-				display_message_result(result)
+				message_result =search_all_message
+				display_message_result(message_result)
+				main_menu_command
 			else
 				puts "Invalid command use list -m or use -h for help or -e to exist"
 				main_menu_command
 			end
-
-			print command_array
 		elsif command_array[0].downcase == 'text'
 			if command_array.length<3 || command_array.length>4
 				puts "Invalid command use text <name> <messages> -h for help or -e to exist"

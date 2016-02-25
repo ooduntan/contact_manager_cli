@@ -15,9 +15,9 @@ module ContactManagerCli
 		puts "Welcome #{name} for help type -h and press the enter key or -e to exist"
 	else
 		puts 'Welcome back '+user_data[0][0]+' for help type -h and press the enter key or -e to exist'
-		contact_manager_obj = ContactManager.new()
+		contact_manager_obj = ContactManager.new
 	end
-	command_checker_obj=CommandHelper.new()
+	command_checker_obj=CommandHelper.new
 	command_checker_obj.main_menu_command
 
 end
