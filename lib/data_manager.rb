@@ -25,7 +25,7 @@ class DataManager
   end
 
   def bring_all_contacts
-    returned_data = @db.execute('SELECT * FROM contacts_data ')
+    returned_data = @db.execute('SELECT * FROM contacts_data ORDER BY contact_name ')
     returned_data
   end
 
@@ -71,6 +71,11 @@ class DataManager
     @db.execute(query)
   end
 
+  def get_user_number
+    returned_data = @db.execute('SELECT * FROM user_data ')
+    returned_data
+  end
+
   def prepare_contact_table
     create_data_table = 'CREATE TABLE IF NOT EXISTS '
     create_data_table += 'contacts_data(contact_idx INTEGER PRIMARY KEY '
@@ -93,7 +98,7 @@ class DataManager
     create_data_table = 'CREATE TABLE IF NOT EXISTS '
     create_data_table += 'contacts_message_data(message_idx INTEGER PRIMARY KEY'
     create_data_table += ' AUTOINCREMENT, contact_idx TEXT NOT NULL, message '
-    create_data_table += 'TEXT NOT NULL)'
+    create_data_table += 'TEXT NOT NULL, time_sent CHAR(50))'
     @db.execute(create_data_table)
   end
 

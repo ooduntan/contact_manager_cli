@@ -16,11 +16,21 @@ class CommandHelper < ContactManager
     end
   end
 
+  def invalid_and_continue
+     puts 'Invalid command press -h for help or -e to exist'.red
+    main_menu_command
+  end
+
   def is_num_str(number)
-    number =~ /^\d+$/ ? true : false
+    if number =~ /^\d+$/
+     true
+   else
+     false
+   end
   end
 
   def clean_input(input_data)
+    if !input_data.split(' ')[0].include?('"') && !input_data.split(' ')[0].include?("'")
     if input_data.include?("'")
       temp_input_data = input_data.split("'")
       input_data = []
@@ -41,6 +51,9 @@ class CommandHelper < ContactManager
       input_data = input_data.split(' ')
   end
     input_data
+  else
+    invalid_and_continue
+  end
   end
 
   def help_info
@@ -71,8 +84,7 @@ class CommandHelper < ContactManager
         if command_array.length == 5
           check_add_format(command_array)
         else
-          puts 'Invalid command press -h for help or -e to exist'.red
-          main_menu_command
+          invalid_and_continue
         end
       elsif command_array[0].casecmp('search').zero?
         if command_array.length < 1 || command_array.length > 2
@@ -84,8 +96,7 @@ class CommandHelper < ContactManager
         end
       elsif command_array[0].casecmp('list').zero?
         if command_array.length < 1 || command_array.length > 2
-          puts 'Invalid command use list -m or use -h for help or -e to exist'.red
-          main_menu_command
+          invalid_and_continue
         elsif command_array[1] == '-m'
           message_result = search_all_message
           display_message_result(message_result)
@@ -107,14 +118,14 @@ class CommandHelper < ContactManager
           result = search_contact(command_array[1])
           recipiant_details = display_search_result_for_sms(command_array[1], result)
           server_reply = send_and_save_message(recipiant_details, command_array[2])
-          if server_reply[2] == 'OK'
+          if server_reply[1] == 'OK'
             puts 'Message Saved and sent successfully'.green
           else
             puts 'An error occurred while sending your message. Please try again'.red
           end
           main_menu_command
         end
-      elsif command_array[0].casecmp('delete').zero?
+      elsif command_array[0].casecmp('del').zero?
       	  if command_array.length < 1 || command_array.length > 2
           puts 'Invalid command use delete <keyword> -h for help or -e to exist'.red
           main_menu_command
@@ -127,12 +138,10 @@ class CommandHelper < ContactManager
         display_help(help_info)
         main_menu_command
       else
-        puts 'Invalid command press -h for help or -e to exist'.red
-        main_menu_command
+       invalid_and_continue
       end
     else
-      puts 'Invalid command press -h for help or -e to exist'.red
-      main_menu_command
+      invalid_and_continue
       end
   end
 end

@@ -9,6 +9,7 @@ module ContactManagerCli
   if user_data.length <= 0
     puts 'Hello! We need your name'.yellow
     name = gets.chomp
+    ContactManager.username_checker(name)
     puts 'and your Phone Number'.yellow
     phone_number = gets.chomp
     purified_phone_number = ContactManager.purify_number(phone_number)
