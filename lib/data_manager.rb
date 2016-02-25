@@ -33,6 +33,10 @@ class DataManager
     returned_data = @db.execute('SELECT * FROM contacts_message_data ')
     returned_data
   end
+  def delete_contact_from_db(contact_idx)
+    query = "DELETE FROM contacts_data WHERE contact_idx = #{contact_idx.to_i}"
+    @db.execute(query)
+  end
 
   def self.look_up_user
     if @db.is_a?(NilClass)
@@ -48,6 +52,7 @@ class DataManager
   private
 
   def format_query_hash(data_hash)
+    returned_hash=Hash.new
     query_columns = ''
     query_values = ''
     data_hash.each do |key, value|

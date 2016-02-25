@@ -43,51 +43,6 @@ class CommandHelper < ContactManager
     input_data
   end
 
-  def display_search_result_for_sms(search_term, result_array)
-    if result_array.length < 1
-      puts ('found no result for ' + search_term).red
-      main_menu_command
-    elsif result_array.length > 1
-      puts 'Which '.yellow + search_term.green + '?'.yelllow
-      prints_result_only(result_array)
-      result_array[(gets.chomp.to_i - 1)]
-    else
-      result_array[0]
-    end
-end
-
-  def display_search_result(search_term, result_array)
-    if result_array.length < 1
-      puts 'found no result for ' + search_term.red
-      main_menu_command
-    elsif result_array.length > 1
-      puts ('Which ' + search_term + '?').yellow
-      prints_result_only(result_array)
-      display_selected_index(result_array[(gets.chomp.to_i - 1)])
-    else
-      puts result_array[0][1] + ': ' + result_array[0][2].green
-      puts 'to continue type your command or use -e to exist'.yellow
-      main_menu_command
-    end
-end
-
-  def display_selected_index(selected_array)
-    if selected_array.is_a?(NilClass)
-      puts 'Wrong value selected'.red
-      main_menu_command
-    else
-      puts (selected_array[1] << ': ' << selected_array[2]).green
-      puts 'to continue type your command or use -e to exist'.yellow
-      main_menu_command
-    end
-  end
-
-  def prints_result_only(result_array)
-    for i in 0...(result_array.length)
-      puts ('[' << (i + 1).to_s << '] ' << result_array[i][1]).green
-    end
-  end
-
   def help_info
   	add_text_help = 'use add -u <Name> -p <phone number> to add new contact'
   	search_help_text = 'use search <Name> to search for a contact'
@@ -160,7 +115,12 @@ end
           main_menu_command
         end
       elsif command_array[0].casecmp('delete').zero?
-      	 puts 'You are in delete'.yellow
+      	  if command_array.length < 1 || command_array.length > 2
+          puts 'Invalid command use delete <keyword> -h for help or -e to exist'.red
+          main_menu_command
+        else
+          delete_search_result_for_sms(command_array[1], search_contact(command_array[1]))
+        end
       elsif command_array[0].casecmp('-e').zero?
         puts 'Thank you for using contact manager goodbye'.yellow
       elsif command_array[0].casecmp('-h').zero?

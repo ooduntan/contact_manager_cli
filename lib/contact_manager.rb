@@ -1,6 +1,7 @@
 # this class handles the  search and add
 require_relative 'data_manager'
 require 'open-uri'
+require 'colorize'
 class ContactManager < DataManager
   def initialize(name = nil, phone_number = nil)
     if !name.nil? && !phone_number.nil?
@@ -93,18 +94,77 @@ class ContactManager < DataManager
     phone_number
   end
 
+  def delete_search_result_for_sms(search_term, result_array)
+    if result_array.length < 1
+      puts ('found no result for ' + search_term).red
+      main_menu_command
+    elsif result_array.length > 1
+      puts 'Which '.yellow + search_term.green + ' ?'.yelllow
+      display_selected_contact_for_del(result_array[(gets.chomp.to_i - 1)])
+      puts 'Contact Deleted'.green
+    else
+      display_selected_contact_for_del(result_array[0])
+      puts 'Contact Deleted'.green
+    end
+end
+
+  def prints_result_only(result_array)
+    for i in 0...(result_array.length)
+      puts ('[' << (i + 1).to_s << '] ' << result_array[i][1]).green
+    end
+  end
+
+  def display_search_result(search_term, result_array)
+    if result_array.length < 1
+      puts 'found no result for ' + search_term.red
+      main_menu_command
+    elsif result_array.length > 1
+      puts ('Which ' + search_term + '?').yellow
+      prints_result_only(result_array)
+      display_selected_index(result_array[(gets.chomp.to_i - 1)])
+    else
+      puts result_array[0][1] + ': ' + result_array[0][2].green
+      puts 'to continue type your command or use -e to exist'.yellow
+      main_menu_command
+    end
+end
+
+  def display_selected_contact_for_del(selected_array)
+    if selected_array.is_a?(NilClass)
+      puts 'Wrong value selected'.red
+      main_menu_command
+    else
+      delete_contact_from_db(selected_array[0])
+      puts 'Contact successfully deleted'.yellow
+      # puts (selected_array[1] << ': ' << selected_array[2]).green
+      puts 'to continue type your command or use -e to exist'.yellow
+      main_menu_command
+    end
+  end
+
+  def display_selected_index(selected_array)
+    if selected_array.is_a?(NilClass)
+      puts 'Wrong value selected'.red
+      main_menu_command
+    else
+      puts (selected_array[1] << ': ' << selected_array[2]).green
+      puts 'to continue type your command or use -e to exist'.yellow
+      main_menu_command
+    end
+  end
+
   def search_contact(name)
     look_up_data(name)
   end
 
-  def display_search_result(listed_number)
-    return_value = ''
-    if listed_number.empty?
-      return_value += 'Your search result has produced #{listedNumber.length}'
-      return_value += ' results'
-      return_value
-    else
-      false
-    end
-  end
+  # def display_search_result(listed_number)
+  #   return_value = ''
+  #   if listed_number.empty?
+  #     return_value += 'Your search result has produced #{listedNumber.length}'
+  #     return_value += ' results'
+  #     return_value
+  #   else
+  #     false
+  #   end
+  # end
 end
