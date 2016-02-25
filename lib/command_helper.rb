@@ -136,6 +136,10 @@ end
           display_message_result(message_result)
           puts 'to continue type your command or use -e to exist'.yellow
           main_menu_command
+        elsif command_array[1] == '-c'
+          display_contacts_result(search_all_contacts)
+          puts 'to continue type your command or use -e to exist'.yellow
+          main_menu_command
         else
           puts 'Invalid command use list -m or use -h for help or -e to exist'.red
           main_menu_command
@@ -155,6 +159,8 @@ end
           end
           main_menu_command
         end
+      elsif command_array[0].casecmp('delete').zero?
+      	 puts 'You are in delete'.yellow
       elsif command_array[0].casecmp('-e').zero?
         puts 'Thank you for using contact manager goodbye'.yellow
       elsif command_array[0].casecmp('-h').zero?

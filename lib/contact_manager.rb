@@ -37,9 +37,26 @@ class ContactManager < DataManager
     bring_all_message
   end
 
+  def search_all_contacts
+    bring_all_contacts
+  end
+
+  def display_contacts_result(message_contact_data)
+    if message_contact_data.length < 1
+      puts 'Oops! Your contact is empty'.red
+    else
+      puts ('Found ' + message_contact_data.length.to_s + ' contacts').yellow
+      counter = 1
+      message_contact_data.each do |each_message_data|
+        puts "[#{counter}] Name: ".yellow + each_message_data[1].green + "\nNumber: ".yellow + each_message_data[2].green+"\n\n"
+        counter += 1
+      end
+    end
+  end
+
   def display_message_result(message_result_data)
     if message_result_data.length < 1
-      puts 'Oops! message box empty'
+      puts 'Oops! message box empty'.red
     else
       puts ('Found ' + message_result_data.length.to_s + ' messages').yellow
       counter = 1

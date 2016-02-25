@@ -24,6 +24,11 @@ class DataManager
     @db.execute(query)
   end
 
+  def bring_all_contacts
+    returned_data = @db.execute('SELECT * FROM contacts_data ')
+    returned_data
+  end
+
   def bring_all_message
     returned_data = @db.execute('SELECT * FROM contacts_message_data ')
     returned_data
