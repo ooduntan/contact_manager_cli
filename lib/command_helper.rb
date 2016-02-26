@@ -9,11 +9,15 @@ class CommandHelper < ContactManager
       error = 'Phone number not a valid number use -u <name> -p <number> '.red
       put error << 'or -e to exist'.red
     else
-      add_new_contact(command_array[2], command_array[4])
-      display = command_array[2] + ' has been created successfully'
-      puts display.green
+      process_correct_formart(command_array)
     end
     main_menu_command
+  end
+
+  def process_correct_formart(command_array)
+    add_new_contact(command_array[2], command_array[4])
+    display = command_array[2] + ' has been created successfully'
+    puts display.green
   end
 
   def invalid_and_continue
@@ -35,26 +39,34 @@ class CommandHelper < ContactManager
 
   def clean_input(input_data)
     if !input_data.split(' ')[0].include?('"') && !input_data.split(' ')[0].include?("'")
-      if input_data.include?("'")
-        temp_input_data = input_data.split("'")
-        input_data = []
-        temp_input_data[0].split(' ').each { |z| input_data << z }
-        input_data << temp_input_data[1]
-        unless temp_input_data[2].is_a?(NilClass)
-          temp_input_data[2].split(' ').each { |z| input_data << z }
-        end
-      elsif input_data.include?('"')
-        clean_single_qoute(temp_input_data,input_data)
-      else
-        input_data = input_data.split(' ')
-      end
-      input_data
+      input_assembler(input_data)
     else
       invalid_and_continue
     end
   end
 
-  def clean_single_qoute(temp_input_data,input_data)
+  def input_assembler(input_data)
+    if input_data.include?("'")
+      clean_single_qoute(input_data)
+    elsif input_data.include?('"')
+      return clean_dobule_qoute(input_data)
+    else
+      return input_data.split(' ')
+    end
+  end
+
+  def clean_single_qoute(input_data)
+    temp_input_data = input_data.split("'")
+    input_data = []
+    temp_input_data[0].split(' ').each { |z| input_data << z }
+    input_data << temp_input_data[1]
+    unless temp_input_data[2].is_a?(NilClass)
+      temp_input_data[2].split(' ').each { |z| input_data << z }
+    end
+    input_data
+  end
+
+  def clean_dobule_qoute(input_data)
     temp_input_data = input_data.split('"')
     input_data = []
     temp_input_data[0].split(' ').each { |z| input_data << z }
@@ -62,6 +74,7 @@ class CommandHelper < ContactManager
     unless temp_input_data[2].is_a?(NilClass)
       temp_input_data[2].split(' ').each { |z| input_data << z }
     end
+    input_data
   end
 
   def help_info
@@ -162,6 +175,19 @@ class CommandHelper < ContactManager
     continue_flow
   end
 
+  def text_validator(command_array)
+    result = search_contact(command_array[1])
+    reci_details = display_search_result_for_sms(command_array[1], result)
+    server_reply = send_and_save_message(reci_details, command_array[2])
+    if server_reply[1] == 'OK'
+      puts 'Message Saved and sent successfully'.green
+    else
+      error = 'An error occurred while sending your message. '
+      error += 'Please try again'
+      puts error.red
+    end
+  end
+
   def text_action(command_array)
     if command_array.length < 3 || command_array.length > 4
       display = 'Invalid command use text <name> <messages> -h for '
@@ -169,16 +195,7 @@ class CommandHelper < ContactManager
       puts display.red
       main_menu_command
     else
-      result = search_contact(command_array[1])
-      reci_details = display_search_result_for_sms(command_array[1], result)
-      server_reply = send_and_save_message(reci_details, command_array[2])
-      if server_reply[1] == 'OK'
-        puts 'Message Saved and sent successfully'.green
-      else
-        error = 'An error occurred while sending your message. '
-        error += 'Please try again'
-        puts error.red
-      end
+      text_validator(command_array)
     end
   end
 end
