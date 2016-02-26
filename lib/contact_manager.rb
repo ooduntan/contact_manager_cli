@@ -21,7 +21,7 @@ class ContactManager < DataManager
   end
 
   def self.username_checker(name)
-    unless name.empty? || name == '-e'
+    unless !name.empty? || name != '-e'
       puts 'You have not typed your name. Try again'
       name = gets.chomp
       username_checker(name)
@@ -112,7 +112,7 @@ class ContactManager < DataManager
     time = Time.new
     formated_time = time.strftime('%Y-%m-%d %H:%M:%S')
     clean_message = quote_string(message)
-    new_message_hash = { 'contact_idx' => contact_idx }
+    new_message_hash = { 'contact_idx' => contact_idx.to_s }
     new_message_hash['message'] = clean_message
     new_message_hash['time_sent'] = formated_time
     save_into_db('contacts_message_data', new_message_hash)

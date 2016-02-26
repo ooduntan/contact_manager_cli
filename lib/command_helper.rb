@@ -126,6 +126,7 @@ class CommandHelper < ContactManager
       puts 'Thank you for using contact manager goodbye'.yellow
     elsif command_array[0].casecmp('-h').zero?
       display_help(help_info)
+      continue_flow
     else
       invalid_and_continue
     end
