@@ -1,6 +1,6 @@
 require_relative 'contact_manager_cli/version'
 require 'colorize'
-
+# this create and instantiate necessary dependency
 module ContactManagerCli
   # Your code goes here...
   require_relative 'contact_manager'
@@ -14,9 +14,11 @@ module ContactManagerCli
     phone_number = gets.chomp
     purified_phone_number = ContactManager.purify_number(phone_number)
     ContactManager.new(name, purified_phone_number)
-    puts 'Welcome '.yellow + name.green + ' for help type -h and press the enter key or -e to exist'.yellow
+    display = 'Welcome '.yellow + name.green + ' for help type -h '.yellow
+    puts display << 'and press the enter key or -e to exist'.yellow
   else
-    puts 'Welcome back '.yellow + user_data[0][0].green + ' for help type -h and press the enter key or -e to exist'.yellow
+    output = 'Welcome back '.yellow + user_data[0][0].green + ' for '.yellow
+    puts output << 'help type -h and press the enter key or -e to exist'.yellow
     ContactManager.new
   end
   command_checker_obj = CommandHelper.new

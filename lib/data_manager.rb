@@ -13,7 +13,7 @@ class DataManager
 
   def look_up_data(name)
     query = 'SELECT * FROM contacts_data where  contact_name '
-    query += "LIKE '%" + name + "%'"
+    query += "LIKE '%" + name + "%' ORDER BY contact_name "
     returned_data = @db.execute(query)
     returned_data
   end
@@ -25,7 +25,8 @@ class DataManager
   end
 
   def bring_all_contacts
-    returned_data = @db.execute('SELECT * FROM contacts_data ORDER BY contact_name ')
+    query = 'SELECT * FROM contacts_data ORDER BY contact_name '
+    returned_data = @db.execute(query)
     returned_data
   end
 
@@ -33,6 +34,7 @@ class DataManager
     returned_data = @db.execute('SELECT * FROM contacts_message_data ')
     returned_data
   end
+
   def delete_contact_from_db(contact_idx)
     query = "DELETE FROM contacts_data WHERE contact_idx = #{contact_idx.to_i}"
     @db.execute(query)
@@ -52,7 +54,7 @@ class DataManager
   private
 
   def format_query_hash(data_hash)
-    returned_hash=Hash.new
+    returned_hash = {}
     query_columns = ''
     query_values = ''
     data_hash.each do |key, value|
@@ -71,7 +73,7 @@ class DataManager
     @db.execute(query)
   end
 
-  def get_user_number
+  def brings_user_number
     returned_data = @db.execute('SELECT * FROM user_data ')
     returned_data
   end
