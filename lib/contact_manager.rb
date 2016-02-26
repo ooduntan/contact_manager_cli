@@ -119,7 +119,7 @@ class ContactManager < DataManager
   end
 
   def send_and_save_message(recipient_array, message)
-    save_message(recipient_array[0], message)
+    # save_message(recipient_array[0], message)
     sender = brings_user_number
     send_sms_using_api(sender[0][0], recipient_array[2], message)
   end
